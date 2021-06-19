@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "6090:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: final_project
+      MYSQL_USER: final_project
+      MYSQL_PASSWORD: final_project
+
+  final-project:
+    build: 
+      context: ./final-project
+      dockerfile: Dockerfile
+    depends_on:
+       - db
+    ports:
+      - "6080:80"
+    privileged:
+      true
+    volumes:
+      - ./final-project/src:/var/www/html
+    environment:
+      HOST_USER_ID: 501
+      HOST_GROUP_ID: 20
